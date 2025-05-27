@@ -1,0 +1,21 @@
+name: Postgres Backup
+on:
+  schedule:
+    - cron: "0 3 * * 6"   # sábados 03:00 UTC
+  workflow_dispatch:      # Allow manual trigger
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump DB
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+          pg_dump $DATABASE_URL -Fc -f backup.dump
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pg-backup-${{ github.run_number }}
+          path: backup.dump
+          retention-days: 30

@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: demo
+  profiles:
+    active: dev
+
+server:
+  tomcat:
+    threads:
+      max: 50
+      min-spare: 5
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+--- # ambiente DEV
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/renderdemo
+    username: dev
+    password: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+--- # ambiente PROD (Render)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME:}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: validate
+    show-sql: false

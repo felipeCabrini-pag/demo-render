@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Render Demo - Spring Boot App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        .btn-gradient {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(45deg, #5a6fd8, #6a4190);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">🚀 Render Demo</h1>
+                    <p class="lead mb-4">Spring Boot + Thymeleaf + PostgreSQL running on Render Free Tier</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <span class="badge bg-light text-dark fs-6">Java 21</span>
+                        <span class="badge bg-light text-dark fs-6">Spring Boot 3.x</span>
+                        <span class="badge bg-light text-dark fs-6">PostgreSQL</span>
+                        <span class="badge bg-light text-dark fs-6">Flyway</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <!-- Success/Error Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="row">
+            <!-- Add Person Form -->
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Add New Person</h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/person}" th:object="${person}" method="post">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" 
+                                       class="form-control"
+                                       th:class="${#fields.hasErrors('name')} ? 'form-control is-invalid' : 'form-control'"
+                                       id="name" 
+                                       th:field="*{name}" 
+                                       placeholder="Enter full name">
+                                <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                                    <span th:errors="*{name}"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" 
+                                       class="form-control"
+                                       th:class="${#fields.hasErrors('email')} ? 'form-control is-invalid' : 'form-control'"
+                                       id="email" 
+                                       th:field="*{email}" 
+                                       placeholder="Enter email address">
+                                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                                    <span th:errors="*{email}"></span>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-gradient text-white w-100">
+                                <i class="fas fa-plus me-2"></i>Add Person
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Statistics</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h2 class="text-primary mb-1" th:text="${#lists.size(persons)}">0</h2>
+                        <p class="text-muted mb-3">Total People Registered</p>
+                        <div class="row">
+                            <div class="col">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted mb-1">Environment</h6>
+                                    <span class="badge bg-success">Production</span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted mb-1">Database</h6>
+                                    <span class="badge bg-primary">PostgreSQL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- People List -->
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i>People Directory</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(persons)}" class="text-center py-5">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No people registered yet</h5>
+                    <p class="text-muted">Add the first person using the form above!</p>
+                </div>
+                
+                <div th:if="${!#lists.isEmpty(persons)}" class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th width="100">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p : ${persons}">
+                                <td th:text="${p.id}" class="align-middle"></td>
+                                <td th:text="${p.name}" class="align-middle"></td>
+                                <td th:text="${p.email}" class="align-middle"></td>
+                                <td class="align-middle">
+                                    <a th:href="@{/person/{id}/delete(id=${p.id})}" 
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('Are you sure you want to delete this person?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-5 py-4 border-top">
+            <p class="text-muted mb-2">
+                <i class="fas fa-heart text-danger"></i> 
+                Built with Spring Boot and deployed on <strong>Render</strong> Free Tier
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/actuator/health" class="btn btn-outline-success btn-sm">Health Check</a>
+                <a href="/actuator/info" class="btn btn-outline-info btn-sm">App Info</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: demo-web
+    runtime: java
+    branch: main
+    plan: free
+    buildCommand: ./gradlew bootJar
+    startCommand: java -jar build/libs/demo-*.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: demo-db
+          property: connectionString
+      - key: JAVA_TOOL_OPTIONS
+        value: -XX:+UseZGC -XX:MaxRAMFraction=1 -Xlog:gc
+databases:
+  - name: demo-db
+    plan: free
+    databaseName: demo
