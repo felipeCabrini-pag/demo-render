@@ -44,6 +44,9 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8080/actuator/health || exit 1
 
+# Set default Spring profile for production
+ENV SPRING_PROFILES_ACTIVE=prod
+
 # JVM optimization for Render's free tier (512MB RAM)
 ENV JAVA_OPTS="-XX:+UseContainerSupport \
     -XX:MaxRAMPercentage=75.0 \
@@ -54,5 +57,5 @@ ENV JAVA_OPTS="-XX:+UseContainerSupport \
     -Djava.security.egd=file:/dev/./urandom \
     -Dspring.jmx.enabled=false"
 
-# Run the application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Run the application with environment debug
+ENTRYPOINT ["sh", "-c", "echo 'Environment variables:' && echo 'SPRING_PROFILES_ACTIVE='$SPRING_PROFILES_ACTIVE && echo 'SPRING_DATASOURCE_URL='$SPRING_DATASOURCE_URL && java $JAVA_OPTS -jar app.jar"]
