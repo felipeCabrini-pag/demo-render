@@ -15,7 +15,23 @@ Colocar sua aplicação **Java 21 / Spring Boot 3.x** em produção *totalmen
 
 ```bash
 # Limpar e construir o projeto
-./gradlew clea1. **New → Web Service** → conecte GitHub e escolha o rep### 5.2 Variáveis de ambiente adicionais
+./gradlew c## 3. Criar banco Postgres no Render
+
+1. Acesse **dashboard.render.com** → **New → PostgreSQL**.  
+2. Escolha **Plan: Free** (1 GB, 10 000 writes/dia, expira em 30 dias). **⚠ Importante:** o Render envia e‑mails de aviso seis dias antes da expiração.  
+3. Selecione a **região** mais próxima dos usuários.  
+4. Clique **Create Database** e guarde:  
+   * `DATABASE_URL` – string de conexão (ex.: `postgres://user:pwd@dpg-xyz.render.com:5432/renderdemo`)  
+   * Usuário e senha (caso queira separar nas variáveis)
+
+### 3.1 Banco Configurado (Exemplo atual)
+
+- **Hostname**: `dpg-d0qhb8emcj7s73e1puc0-a.virginia-postgres.render.com`
+- **Database**: `demo_render_zrrc`
+- **Username**: `demo_render_zrrc_user`
+- **URL Externa**: `postgresql://demo_render_zrrc_user:e3AAvfWvYJfqaC6AcbDrgzch4tzvo8qw@dpg-d0qhb8emcj7s73e1puc0-a.virginia-postgres.render.com/demo_render_zrrc`
+
+> **Nota**: Substitua pelas credenciais do seu próprio banco PostgreSQL.New → Web Service** → conecte GitHub e escolha o rep### 5.2 Variáveis de ambiente adicionais
 
 Para otimização em containers com limitação de memória (como Render Free):
 
