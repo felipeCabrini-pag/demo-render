@@ -17,6 +17,11 @@ public class PersonController {
     private final PersonService personService;
     
     @GetMapping("/")
+    public String home() {
+        return "home";
+    }
+    
+    @GetMapping("/persons")
     public String index(Model model) {
         model.addAttribute("persons", personService.findAll());
         model.addAttribute("person", new Person());
@@ -42,13 +47,13 @@ public class PersonController {
         
         personService.save(person);
         redirectAttributes.addFlashAttribute("success", "Person added successfully!");
-        return "redirect:/";
+        return "redirect:/persons";
     }
     
     @GetMapping("/person/{id}/delete")
     public String deletePerson(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         personService.deleteById(id);
         redirectAttributes.addFlashAttribute("success", "Person deleted successfully!");
-        return "redirect:/";
+        return "redirect:/persons";
     }
 }

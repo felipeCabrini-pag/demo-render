@@ -15,7 +15,7 @@ COPY src/ src/
 # Build the application
 RUN ./gradlew bootJar --no-daemon
 
-# Production stage with minimal JRE
+# Production stage with minimal JRE optimized for Render
 FROM eclipse-temurin:21-jre-alpine
 
 # Install curl for health checks
@@ -44,13 +44,15 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8080/actuator/health || exit 1
 
-# JVM optimization for containerized environments
+# JVM optimization for Render's free tier (512MB RAM)
 ENV JAVA_OPTS="-XX:+UseContainerSupport \
-    -XX:MaxRAMPercentage=80.0 \
+    -XX:MaxRAMPercentage=75.0 \
     -XX:+UseG1GC \
-    -XX:+UnlockExperimentalVMOptions \
-    -XX:+UseJVMCICompiler \
-    -Djava.security.egd=file:/dev/./urandom"
+    -XX:G1HeapRegionSize=16m \
+    -XX:+UseStringDeduplication \
+    -XX:+OptimizeStringConcat \
+    -Djava.security.egd=file:/dev/./urandom \
+    -Dspring.jmx.enabled=false"
 
 # Run the application
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

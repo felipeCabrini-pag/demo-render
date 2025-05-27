@@ -1,11 +1,18 @@
 # Demo Spring Boot Application
 
-🚀 A complete Spring Boot application demonstrating modern Java web development with deployment to Render.
+🚀 A complete    └── resources/
+       ├── application.yml               # Application configuration
+       ├── db/migration/
+       │   └── V1__create_tables.sql     # Database migration
+       └── templates/
+           ├── home.html                 # Hello World home page
+           └── index.html                # Person management page Boot application demonstrating modern Java web development with deployment to Render.
 
 ## Features
 
 - **Spring Boot 3.3.0** with Java 21
 - **Thymeleaf** templating engine with Bootstrap UI
+- **Hello World Home Page** with pickup truck image
 - **PostgreSQL** database with JPA/Hibernate
 - **Flyway** database migrations
 - **Lombok** for reducing boilerplate code
@@ -72,23 +79,50 @@ src/
    cd demo
    ```
 
-2. **Build the application**
+2. **Option A: Using Docker Compose (Recommended)**
    ```bash
+   # Start PostgreSQL and the application
+   docker-compose up -d
+   
+   # View logs
+   docker-compose logs -f app
+   
+   # Stop services
+   docker-compose down
+   ```
+   
+   Access the application:
+   - Main app: http://localhost:8080
+   - pgAdmin: http://localhost:5050 (admin@demo.com / admin)
+   - Health check: http://localhost:8080/actuator/health
+
+3. **Option B: Local Development with Gradle**
+   
+   First, set up PostgreSQL locally:
+   ```bash
+   # Create database
+   createdb renderdemo
+   
+   # Create user
+   psql -c "CREATE USER dev WITH PASSWORD 'dev';"
+   psql -c "GRANT ALL PRIVILEGES ON DATABASE renderdemo TO dev;"
+   ```
+   
+   Then run the application:
+   ```bash
+   # Build the application
    ./gradlew build
-   ```
-
-3. **Run tests**
-   ```bash
+   
+   # Run tests
    ./gradlew test
-   ```
-
-4. **Start the application** (requires PostgreSQL)
-   ```bash
+   
+   # Start the application
    ./gradlew bootRun
    ```
 
-5. **Access the application**
-   - Open http://localhost:8080
+4. **Access the application**
+   - Home page: http://localhost:8080
+   - Person management: http://localhost:8080/persons
    - Health check: http://localhost:8080/actuator/health
 
 ### Database Setup (Development)
@@ -147,7 +181,8 @@ This application is configured for deployment on **Render** using the free tier.
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/` | Main page with person form and list |
+| GET | `/` | Hello World home page with pickup truck image |
+| GET | `/persons` | Person management page with form and list |
 | POST | `/person` | Add a new person |
 | GET | `/person/{id}/delete` | Delete a person |
 | GET | `/actuator/health` | Health check endpoint |

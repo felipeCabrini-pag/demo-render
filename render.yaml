@@ -13,7 +13,7 @@ services:
           name: demo-db
           property: connectionString
       - key: JAVA_TOOL_OPTIONS
-        value: -XX:+UseZGC -XX:MaxRAMFraction=1 -Xlog:gc
+        value: -XX:+UseContainerSupport -XX:MaxRAMPercentage=80.0 -XX:+UseG1GC
 databases:
   - name: demo-db
     plan: free
