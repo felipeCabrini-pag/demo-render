@@ -1,0 +1,57 @@
+# Build artifacts
+build/
+target/
+*.jar
+*.war
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+PROJECT_README.md
+HELP.md
+*.md
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Node modules (if any)
+node_modules/
+
+# Gradle wrapper jar (will be copied separately)
+!gradle/wrapper/gradle-wrapper.jar
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Test coverage
+coverage/
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Render deployment files
+render.yaml

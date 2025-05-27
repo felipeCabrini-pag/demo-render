@@ -1,11 +1,10 @@
 services:
   - type: web
     name: demo-web
-    runtime: java
+    runtime: docker
     branch: main
     plan: free
-    buildCommand: ./gradlew bootJar
-    startCommand: java -jar build/libs/demo-*.jar
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
