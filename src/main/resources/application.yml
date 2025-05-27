@@ -2,7 +2,7 @@ spring:
   application:
     name: demo
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE:dev}
 
 server:
   tomcat:
@@ -45,7 +45,11 @@ spring:
     hikari:
       maximum-pool-size: 10
   jpa:
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    validate-on-migrate: false

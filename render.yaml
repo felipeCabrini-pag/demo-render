@@ -9,6 +9,10 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
       - key: SPRING_DATASOURCE_URL
-        value: postgresql://demo_render_zrrc_user:e3AAvfWvYJfqaC6AcbDrgzch4tzvo8qw@dpg-d0qhb8emcj7s73e1puc0-a.virginia-postgres.render.com/demo_render_zrrc
+        value: jdbc:postgresql://dpg-d0qhb8emcj7s73e1puc0-a.virginia-postgres.render.com:5432/demo_render_zrrc?sslmode=require&connectTimeout=30
+      - key: SPRING_DATASOURCE_USERNAME
+        value: demo_render_zrrc_user
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: e3AAvfWvYJfqaC6AcbDrgzch4tzvo8qw
       - key: JAVA_TOOL_OPTIONS
         value: -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+UseG1GC
